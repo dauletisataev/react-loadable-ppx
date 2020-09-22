@@ -1,0 +1,67 @@
+.TH "Float.Array" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Float.Array \- no description
+.SH Module
+Module   Float.Array
+.SH Documentation
+.sp
+Module
+.BI "Array"
+ : 
+.B sig  end
+
+.sp
+
+.sp
+
+.sp
+.sp
+.I type t 
+= 
+.B floatarray
+
+.sp
+
+.sp
+
+.I val create 
+: 
+.B int -> t
+.sp
+
+.sp
+
+.I val length 
+: 
+.B t -> int
+.sp
+
+.sp
+
+.I val get 
+: 
+.B t -> int -> float
+.sp
+
+.sp
+
+.I val set 
+: 
+.B t -> int -> float -> unit
+.sp
+
+.sp
+
+.I val unsafe_get 
+: 
+.B t -> int -> float
+.sp
+
+.sp
+
+.I val unsafe_set 
+: 
+.B t -> int -> float -> unit
+.sp
+
+.sp

@@ -1,0 +1,163 @@
+.TH "Seq" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Seq \-  Functional Iterators 
+.SH Module
+Module   Seq
+.SH Documentation
+.sp
+Module
+.BI "Seq"
+ : 
+.B sig  end
+
+.sp
+
+.B Functional Iterators
+
+
+.sp
+
+.sp
+.sp
+
+.PP
+
+.B === The type \&'a t is a delayed list, i\&.e\&. a list where some evaluation
+.B     is needed to access the next element\&. This makes it possible to build
+.B     infinite sequences, to build sequences as we traverse them, and to transform
+.B     them in a lazy fashion rather than upfront\&. ===
+
+.PP
+.I type 
+.B 'a
+.I t 
+= 
+.B unit -> 'a node
+
+.sp
+The type of delayed lists containing elements of type 
+.B \&'a
+\&.
+Note that the concrete list node 
+.B \&'a node
+is delayed under a closure,
+not a 
+.B lazy
+block, which means it might be recomputed every time
+we access it\&.
+
+.sp
+.I type 
+.B 'a
+.I node 
+=
+ | Nil
+ | Cons
+.B of 
+.B 'a * 'a t
+.I "  "
+  (* A fully\-evaluated list node, either empty or containing an element
+and a delayed tail\&.
+ *)
+ 
+.sp
+
+.sp
+
+.I val empty 
+: 
+.B 'a t
+.sp
+The empty sequence, containing no elements\&.
+
+.sp
+
+.I val return 
+: 
+.B 'a -> 'a t
+.sp
+The singleton sequence containing only the given element\&.
+
+.sp
+
+.I val map 
+: 
+.B ('a -> 'b) -> 'a t -> 'b t
+.sp
+
+.B map f seq
+returns a new sequence whose elements are the elements of
+.B seq
+, transformed by 
+.B f
+\&.
+This transformation is lazy, it only applies when the result is traversed\&.
+.sp
+If 
+.B seq = [1;2;3]
+, then 
+.B map f seq = [f 1; f 2; f 3]
+\&.
+
+.sp
+
+.I val filter 
+: 
+.B ('a -> bool) -> 'a t -> 'a t
+.sp
+Remove from the sequence the elements that do not satisfy the
+given predicate\&.
+This transformation is lazy, it only applies when the result is traversed\&.
+
+.sp
+
+.I val filter_map 
+: 
+.B ('a -> 'b option) -> 'a t -> 'b t
+.sp
+Apply the function to every element; if 
+.B f x = None
+then 
+.B x
+is dropped;
+if 
+.B f x = Some y
+then 
+.B y
+is returned\&.
+This transformation is lazy, it only applies when the result is traversed\&.
+
+.sp
+
+.I val flat_map 
+: 
+.B ('a -> 'b t) -> 'a t -> 'b t
+.sp
+Map each element to a subsequence, then return each element of this
+sub\-sequence in turn\&.
+This transformation is lazy, it only applies when the result is traversed\&.
+
+.sp
+
+.I val fold_left 
+: 
+.B ('a -> 'b -> 'a) -> 'a -> 'b t -> 'a
+.sp
+Traverse the sequence from left to right, combining each element with the
+accumulator using the given function\&.
+The traversal happens immediately and will not terminate on infinite sequences\&.
+.sp
+Also see 
+.B List\&.fold_left
+
+
+.sp
+
+.I val iter 
+: 
+.B ('a -> unit) -> 'a t -> unit
+.sp
+Iterate on the sequence, calling the (imperative) function on every element\&.
+The traversal happens immediately and will not terminate on infinite sequences\&.
+
+.sp

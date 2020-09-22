@@ -1,0 +1,95 @@
+.TH "Consistbl" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Consistbl \- no description
+.SH Module
+Module   Consistbl
+.SH Documentation
+.sp
+Module
+.BI "Consistbl"
+ : 
+.B sig  end
+
+.sp
+
+.sp
+
+.sp
+.sp
+.I type t 
+
+.sp
+
+.sp
+
+.I val create 
+: 
+.B unit -> t
+.sp
+
+.sp
+
+.I val clear 
+: 
+.B t -> unit
+.sp
+
+.sp
+
+.I val check 
+: 
+.B t -> string -> Digest.t -> string -> unit
+.sp
+
+.sp
+
+.I val check_noadd 
+: 
+.B t -> string -> Digest.t -> string -> unit
+.sp
+
+.sp
+
+.I val set 
+: 
+.B t -> string -> Digest.t -> string -> unit
+.sp
+
+.sp
+
+.I val source 
+: 
+.B t -> string -> string
+.sp
+
+.sp
+
+.I val extract 
+: 
+.B string list -> t -> (string * Digest.t option) list
+.sp
+
+.sp
+
+.I val filter 
+: 
+.B (string -> bool) -> t -> unit
+.sp
+
+.sp
+
+.I exception Inconsistency 
+.B of 
+.B string * string * string
+
+.sp
+
+.sp
+
+.I exception Not_available 
+.B of 
+.B string
+
+.sp
+
+.sp

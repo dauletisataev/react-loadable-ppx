@@ -1,0 +1,32 @@
+.TH "Numbers.Int" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Numbers.Int \- no description
+.SH Module
+Module   Numbers.Int
+.SH Documentation
+.sp
+Module
+.BI "Int"
+ : 
+.B sig  end
+
+.sp
+
+.sp
+
+.sp
+.sp
+.I include Identifiable.S
+.sp
+
+.sp
+
+.I val zero_to_n 
+: 
+.B int -> Set.t
+.sp
+
+.B zero_to_n n
+is the set of numbers {0, \&.\&.\&., n} (inclusive)\&.
+
+.sp

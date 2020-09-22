@@ -1,0 +1,233 @@
+.TH "Typemod" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Typemod \- Type-checking of the module language and typed ast plugin hooks
+.SH Module
+Module   Typemod
+.SH Documentation
+.sp
+Module
+.BI "Typemod"
+ : 
+.B sig  end
+
+.sp
+Type\-checking of the module language and typed ast plugin hooks
+
+.sp
+
+.sp
+.sp
+
+.I val type_module 
+: 
+.B Env.t -> Parsetree.module_expr -> Typedtree.module_expr
+.sp
+
+.sp
+
+.I val type_structure 
+: 
+.B Env.t ->
+.B   Parsetree.structure ->
+.B   Location.t -> Typedtree.structure * Types.signature * Env.t
+.sp
+
+.sp
+
+.I val type_toplevel_phrase 
+: 
+.B Env.t -> Parsetree.structure -> Typedtree.structure * Types.signature * Env.t
+.sp
+
+.sp
+
+.I val type_implementation 
+: 
+.B string ->
+.B   string ->
+.B   string ->
+.B   Env.t ->
+.B   Parsetree.structure -> Typedtree.structure * Typedtree.module_coercion
+.sp
+
+.sp
+
+.I val type_interface 
+: 
+.B string -> Env.t -> Parsetree.signature -> Typedtree.signature
+.sp
+
+.sp
+
+.I val transl_signature 
+: 
+.B Env.t -> Parsetree.signature -> Typedtree.signature
+.sp
+
+.sp
+
+.I val check_nongen_schemes 
+: 
+.B Env.t -> Types.signature -> unit
+.sp
+
+.sp
+
+.I val type_open_ 
+: 
+.B ?used_slot:bool Pervasives.ref ->
+.B   ?toplevel:bool ->
+.B   Asttypes.override_flag ->
+.B   Env.t -> Location.t -> Longident.t Asttypes.loc -> Path.t * Env.t
+.sp
+
+.sp
+
+.I val modtype_of_package 
+: 
+.B Env.t ->
+.B   Location.t ->
+.B   Path.t -> Longident.t list -> Types.type_expr list -> Types.module_type
+.sp
+
+.sp
+
+.I val simplify_signature 
+: 
+.B Types.signature -> Types.signature
+.sp
+
+.sp
+
+.I val path_of_module 
+: 
+.B Typedtree.module_expr -> Path.t option
+.sp
+
+.sp
+
+.I val save_signature 
+: 
+.B string ->
+.B   Typedtree.signature ->
+.B   string -> string -> Env.t -> Cmi_format.cmi_infos -> unit
+.sp
+
+.sp
+
+.I val package_units 
+: 
+.B Env.t -> string list -> string -> string -> Typedtree.module_coercion
+.sp
+
+.sp
+
+.I val initial_env 
+: 
+.B loc:Location.t ->
+.B   safe_string:bool ->
+.B   initially_opened_module:string option ->
+.B   open_implicit_modules:string list -> Env.t
+.sp
+
+.sp
+.I type error 
+=
+ | Cannot_apply
+.B of 
+.B Types.module_type
+ | Not_included
+.B of 
+.B Includemod.error list
+ | Cannot_eliminate_dependency
+.B of 
+.B Types.module_type
+ | Signature_expected
+ | Structure_expected
+.B of 
+.B Types.module_type
+ | With_no_component
+.B of 
+.B Longident.t
+ | With_mismatch
+.B of 
+.B Longident.t * Includemod.error list
+ | With_makes_applicative_functor_ill_typed
+.B of 
+.B Longident.t * Path.t * Includemod.error list
+ | With_changes_module_alias
+.B of 
+.B Longident.t * Ident.t * Path.t
+ | With_cannot_remove_constrained_type
+ | Repeated_name
+.B of 
+.B string * string
+ | Non_generalizable
+.B of 
+.B Types.type_expr
+ | Non_generalizable_class
+.B of 
+.B Ident.t * Types.class_declaration
+ | Non_generalizable_module
+.B of 
+.B Types.module_type
+ | Implementation_is_required
+.B of 
+.B string
+ | Interface_not_compiled
+.B of 
+.B string
+ | Not_allowed_in_functor_body
+ | Not_a_packed_module
+.B of 
+.B Types.type_expr
+ | Incomplete_packed_module
+.B of 
+.B Types.type_expr
+ | Scoping_pack
+.B of 
+.B Longident.t * Types.type_expr
+ | Recursive_module_require_explicit_type
+ | Apply_generative
+ | Cannot_scrape_alias
+.B of 
+.B Path.t
+ 
+.sp
+
+.sp
+
+.I exception Error 
+.B of 
+.B Location.t * Env.t * error
+
+.sp
+
+.sp
+
+.I exception Error_forward 
+.B of 
+.B Location.error
+
+.sp
+
+.sp
+
+.I val report_error 
+: 
+.B Env.t -> Format.formatter -> error -> unit
+.sp
+
+.sp
+.I module ImplementationHooks : 
+.B sig  end
+
+.sp
+
+.sp
+.I module InterfaceHooks : 
+.B sig  end
+
+.sp
+
+.sp

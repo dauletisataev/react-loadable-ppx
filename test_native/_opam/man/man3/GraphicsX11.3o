@@ -1,0 +1,53 @@
+.TH "GraphicsX11" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+GraphicsX11 \- Additional graphics primitives for the X Windows system.
+.SH Module
+Module   GraphicsX11
+.SH Documentation
+.sp
+Module
+.BI "GraphicsX11"
+ : 
+.B sig  end
+
+.sp
+Additional graphics primitives for the X Windows system\&.
+
+.sp
+
+.sp
+.sp
+.I type window_id 
+= 
+.B string
+
+.sp
+
+.sp
+
+.I val window_id 
+: 
+.B unit -> window_id
+.sp
+Return the unique identifier of the OCaml graphics window\&.
+The returned string is an unsigned 32 bits integer
+in decimal form\&.
+
+.sp
+
+.I val open_subwindow 
+: 
+.B x:int -> y:int -> width:int -> height:int -> window_id
+.sp
+Create a sub\-window of the current OCaml graphics window
+and return its identifier\&.
+
+.sp
+
+.I val close_subwindow 
+: 
+.B window_id -> unit
+.sp
+Close the sub\-window having the given identifier\&.
+
+.sp

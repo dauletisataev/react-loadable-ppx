@@ -1,0 +1,717 @@
+.TH "Float" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Float \-  Floating-point arithmetic 
+.SH Module
+Module   Float
+.SH Documentation
+.sp
+Module
+.BI "Float"
+ : 
+.B sig  end
+
+.sp
+
+.B Floating\-point arithmetic
+.sp
+OCaml\&'s floating\-point numbers follow the
+IEEE 754 standard, using double precision (64 bits) numbers\&.
+Floating\-point operations never raise an exception on overflow,
+underflow, division by zero, etc\&.  Instead, special IEEE numbers
+are returned as appropriate, such as 
+.B infinity
+for 
+.B 1\&.0 /\&. 0\&.0
+,
+.B neg_infinity
+for 
+.B \-1\&.0 /\&. 0\&.0
+, and 
+.B nan
+(\&'not a number\&')
+for 
+.B 0\&.0 /\&. 0\&.0
+\&.  These special numbers then propagate through
+floating\-point computations as expected: for instance,
+.B 1\&.0 /\&. infinity
+is 
+.B 0\&.0
+, and any arithmetic operation with 
+.B nan
+as argument returns 
+.B nan
+as result\&.
+
+.sp
+.B "Since"
+4.07.0
+
+.sp
+
+.sp
+.sp
+
+.I val neg 
+: 
+.B float -> float
+.sp
+Unary negation\&.
+
+.sp
+
+.I val add 
+: 
+.B float -> float -> float
+.sp
+Floating\-point addition\&.
+
+.sp
+
+.I val sub 
+: 
+.B float -> float -> float
+.sp
+Floating\-point subtraction\&.
+
+.sp
+
+.I val mul 
+: 
+.B float -> float -> float
+.sp
+Floating\-point multiplication\&.
+
+.sp
+
+.I val div 
+: 
+.B float -> float -> float
+.sp
+Floating\-point division\&.
+
+.sp
+
+.I val rem 
+: 
+.B float -> float -> float
+.sp
+
+.B rem a b
+returns the remainder of 
+.B a
+with respect to 
+.B b
+\&.  The returned
+value is 
+.B a \-\&. n *\&. b
+, where 
+.B n
+is the quotient 
+.B a /\&. b
+rounded towards
+zero to an integer\&.
+
+.sp
+
+.I val abs 
+: 
+.B float -> float
+.sp
+
+.B abs f
+returns the absolute value of 
+.B f
+\&.
+
+.sp
+
+.I val infinity 
+: 
+.B float
+.sp
+Positive infinity\&.
+
+.sp
+
+.I val neg_infinity 
+: 
+.B float
+.sp
+Negative infinity\&.
+
+.sp
+
+.I val nan 
+: 
+.B float
+.sp
+A special floating\-point value denoting the result of an
+undefined operation such as 
+.B 0\&.0 /\&. 0\&.0
+\&.  Stands for
+\&'not a number\&'\&.  Any floating\-point operation with 
+.B nan
+as
+argument returns 
+.B nan
+as result\&.  As for floating\-point comparisons,
+.B =
+, 
+.B <
+, 
+.B <=
+, 
+.B >
+and 
+.B >=
+return 
+.B false
+and 
+.B <>
+returns 
+.B true
+if one or both of their arguments is 
+.B nan
+\&.
+
+.sp
+
+.I val pi 
+: 
+.B float
+.sp
+The constant pi\&.
+
+.sp
+
+.I val max_float 
+: 
+.B float
+.sp
+The largest positive finite value of type 
+.B float
+\&.
+
+.sp
+
+.I val min_float 
+: 
+.B float
+.sp
+The smallest positive, non\-zero, non\-denormalized value of type 
+.B float
+\&.
+
+.sp
+
+.I val epsilon 
+: 
+.B float
+.sp
+The difference between 
+.B 1\&.0
+and the smallest exactly representable
+floating\-point number greater than 
+.B 1\&.0
+\&.
+
+.sp
+
+.I val of_int 
+: 
+.B int -> float
+.sp
+Convert an integer to floating\-point\&.
+
+.sp
+
+.I val to_int 
+: 
+.B float -> int
+.sp
+Truncate the given floating\-point number to an integer\&.
+The result is unspecified if the argument is 
+.B nan
+or falls outside the
+range of representable integers\&.
+
+.sp
+
+.I val of_string 
+: 
+.B string -> float
+.sp
+Convert the given string to a float\&.  The string is read in decimal
+(by default) or in hexadecimal (marked by 
+.B 0x
+or 
+.B 0X
+)\&.
+The format of decimal floating\-point numbers is
+.B  [\-] dd\&.ddd (e|E) [+|\-] dd 
+, where 
+.B d
+stands for a decimal digit\&.
+The format of hexadecimal floating\-point numbers is
+.B  [\-] 0(x|X) hh\&.hhh (p|P) [+|\-] dd 
+, where 
+.B h
+stands for an
+hexadecimal digit and 
+.B d
+for a decimal digit\&.
+In both cases, at least one of the integer and fractional parts must be
+given; the exponent part is optional\&.
+The 
+.B _
+(underscore) character can appear anywhere in the string
+and is ignored\&.
+Depending on the execution platforms, other representations of
+floating\-point numbers can be accepted, but should not be relied upon\&.
+Raise 
+.B Failure "float_of_string"
+if the given string is not a valid
+representation of a float\&.
+
+.sp
+
+.I val of_string_opt 
+: 
+.B string -> float option
+.sp
+Same as 
+.B of_string
+, but returns 
+.B None
+instead of raising\&.
+
+.sp
+
+.I val to_string 
+: 
+.B float -> string
+.sp
+Return the string representation of a floating\-point number\&.
+
+.sp
+.I type fpclass 
+= 
+.B Pervasives.fpclass
+=
+ | FP_normal  (* Normal number, none of the below
+ *)
+ | FP_subnormal  (* Number very close to 0\&.0, has reduced precision
+ *)
+ | FP_zero  (* Number is 0\&.0 or \-0\&.0
+ *)
+ | FP_infinite  (* Number is positive or negative infinity
+ *)
+ | FP_nan  (* Not a number: result of an undefined operation
+ *)
+ 
+.sp
+The five classes of floating\-point numbers, as determined by
+the 
+.B Float\&.classify_float
+function\&.
+
+.sp
+
+.I val classify_float 
+: 
+.B float -> fpclass
+.sp
+Return the class of the given floating\-point number:
+normal, subnormal, zero, infinite, or not a number\&.
+
+.sp
+
+.I val pow 
+: 
+.B float -> float -> float
+.sp
+Exponentiation\&.
+
+.sp
+
+.I val sqrt 
+: 
+.B float -> float
+.sp
+Square root\&.
+
+.sp
+
+.I val exp 
+: 
+.B float -> float
+.sp
+Exponential\&.
+
+.sp
+
+.I val log 
+: 
+.B float -> float
+.sp
+Natural logarithm\&.
+
+.sp
+
+.I val log10 
+: 
+.B float -> float
+.sp
+Base 10 logarithm\&.
+
+.sp
+
+.I val expm1 
+: 
+.B float -> float
+.sp
+
+.B expm1 x
+computes 
+.B exp x \-\&. 1\&.0
+, giving numerically\-accurate results
+even if 
+.B x
+is close to 
+.B 0\&.0
+\&.
+
+.sp
+
+.I val log1p 
+: 
+.B float -> float
+.sp
+
+.B log1p x
+computes 
+.B log(1\&.0 +\&. x)
+(natural logarithm),
+giving numerically\-accurate results even if 
+.B x
+is close to 
+.B 0\&.0
+\&.
+
+.sp
+
+.I val cos 
+: 
+.B float -> float
+.sp
+Cosine\&.  Argument is in radians\&.
+
+.sp
+
+.I val sin 
+: 
+.B float -> float
+.sp
+Sine\&.  Argument is in radians\&.
+
+.sp
+
+.I val tan 
+: 
+.B float -> float
+.sp
+Tangent\&.  Argument is in radians\&.
+
+.sp
+
+.I val acos 
+: 
+.B float -> float
+.sp
+Arc cosine\&.  The argument must fall within the range 
+.B [\-1\&.0, 1\&.0]
+\&.
+Result is in radians and is between 
+.B 0\&.0
+and 
+.B pi
+\&.
+
+.sp
+
+.I val asin 
+: 
+.B float -> float
+.sp
+Arc sine\&.  The argument must fall within the range 
+.B [\-1\&.0, 1\&.0]
+\&.
+Result is in radians and is between 
+.B \-pi/2
+and 
+.B pi/2
+\&.
+
+.sp
+
+.I val atan 
+: 
+.B float -> float
+.sp
+Arc tangent\&.
+Result is in radians and is between 
+.B \-pi/2
+and 
+.B pi/2
+\&.
+
+.sp
+
+.I val atan2 
+: 
+.B float -> float -> float
+.sp
+
+.B atan2 y x
+returns the arc tangent of 
+.B y /\&. x
+\&.  The signs of 
+.B x
+and 
+.B y
+are used to determine the quadrant of the result\&.
+Result is in radians and is between 
+.B \-pi
+and 
+.B pi
+\&.
+
+.sp
+
+.I val hypot 
+: 
+.B float -> float -> float
+.sp
+
+.B hypot x y
+returns 
+.B sqrt(x *\&. x + y *\&. y)
+, that is, the length
+of the hypotenuse of a right\-angled triangle with sides of length
+.B x
+and 
+.B y
+, or, equivalently, the distance of the point 
+.B (x,y)
+to origin\&.  If one of 
+.B x
+or 
+.B y
+is infinite, returns 
+.B infinity
+even if the other is 
+.B nan
+\&.
+
+.sp
+
+.I val cosh 
+: 
+.B float -> float
+.sp
+Hyperbolic cosine\&.  Argument is in radians\&.
+
+.sp
+
+.I val sinh 
+: 
+.B float -> float
+.sp
+Hyperbolic sine\&.  Argument is in radians\&.
+
+.sp
+
+.I val tanh 
+: 
+.B float -> float
+.sp
+Hyperbolic tangent\&.  Argument is in radians\&.
+
+.sp
+
+.I val ceil 
+: 
+.B float -> float
+.sp
+Round above to an integer value\&.
+.B ceil f
+returns the least integer value greater than or equal to 
+.B f
+\&.
+The result is returned as a float\&.
+
+.sp
+
+.I val floor 
+: 
+.B float -> float
+.sp
+Round below to an integer value\&.
+.B floor f
+returns the greatest integer value less than or
+equal to 
+.B f
+\&.
+The result is returned as a float\&.
+
+.sp
+
+.I val copysign 
+: 
+.B float -> float -> float
+.sp
+
+.B copysign x y
+returns a float whose absolute value is that of 
+.B x
+and whose sign is that of 
+.B y
+\&.  If 
+.B x
+is 
+.B nan
+, returns 
+.B nan
+\&.
+If 
+.B y
+is 
+.B nan
+, returns either 
+.B x
+or 
+.B \-\&. x
+, but it is not
+specified which\&.
+
+.sp
+
+.I val frexp 
+: 
+.B float -> float * int
+.sp
+
+.B frexp f
+returns the pair of the significant
+and the exponent of 
+.B f
+\&.  When 
+.B f
+is zero, the
+significant 
+.B x
+and the exponent 
+.B n
+of 
+.B f
+are equal to
+zero\&.  When 
+.B f
+is non\-zero, they are defined by
+.B f = x *\&. 2 ** n
+and 
+.B 0\&.5 <= x < 1\&.0
+\&.
+
+.sp
+
+.I val ldexp 
+: 
+.B float -> int -> float
+.sp
+
+.B ldexp x n
+returns 
+.B x *\&. 2 ** n
+\&.
+
+.sp
+
+.I val modf 
+: 
+.B float -> float * float
+.sp
+
+.B modf f
+returns the pair of the fractional and integral
+part of 
+.B f
+\&.
+
+.sp
+.I type t 
+= 
+.B float
+
+.sp
+An alias for the type of floating\-point numbers\&.
+
+.sp
+
+.I val compare 
+: 
+.B t -> t -> int
+.sp
+
+.B compare x y
+returns 
+.B 0
+if 
+.B x
+is equal to 
+.B y
+, a negative integer if 
+.B x
+is less than 
+.B y
+, and a positive integer if 
+.B x
+is greater than
+.B y
+\&. 
+.B compare
+treats 
+.B nan
+as equal to itself and less than any other float
+value\&.  This treatment of 
+.B nan
+ensures that 
+.B compare
+defines a total
+ordering relation\&.
+
+.sp
+
+.I val equal 
+: 
+.B t -> t -> bool
+.sp
+The equal function for floating\-point numbers, compared using 
+.B Float\&.compare
+\&.
+
+.sp
+
+.I val hash 
+: 
+.B t -> int
+.sp
+The hash function for floating\-point numbers\&.
+
+.sp
+.I module Array : 
+.B sig  end
+
+.sp
+
+.sp

@@ -1,0 +1,317 @@
+.TH "Dynlink" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Dynlink \- Dynamic loading of object files.
+.SH Module
+Module   Dynlink
+.SH Documentation
+.sp
+Module
+.BI "Dynlink"
+ : 
+.B sig  end
+
+.sp
+Dynamic loading of object files\&.
+
+.sp
+
+.sp
+.sp
+
+.I val is_native 
+: 
+.B bool
+.sp
+
+.B true
+if the program is native,
+.B false
+if the program is bytecode\&.
+
+.sp
+
+.PP
+
+.B === 
+.B Dynamic loading of compiled files
+.B  ===
+
+.PP
+
+.I val loadfile 
+: 
+.B string -> unit
+.sp
+In bytecode: load the given bytecode object file (
+.B \&.cmo
+file) or
+bytecode library file (
+.B \&.cma
+file), and link it with the running
+program\&. In native code: load the given OCaml plugin file (usually
+.B \&.cmxs
+), and link it with the running
+program\&.
+All toplevel expressions in the loaded compilation units
+are evaluated\&. No facilities are provided to
+access value names defined by the unit\&. Therefore, the unit
+must register itself its entry points with the main program,
+e\&.g\&. by modifying tables of functions\&.
+
+.sp
+
+.I val loadfile_private 
+: 
+.B string -> unit
+.sp
+Same as 
+.B loadfile
+, except that the compilation units just loaded
+are hidden (cannot be referenced) from other modules dynamically
+loaded afterwards\&.
+
+.sp
+
+.I val adapt_filename 
+: 
+.B string -> string
+.sp
+In bytecode, the identity function\&. In native code, replace the last
+extension with 
+.B \&.cmxs
+\&.
+
+.sp
+
+.PP
+
+.B === 
+.B Access control
+.B  ===
+
+.PP
+
+.I val allow_only 
+: 
+.B string list -> unit
+.sp
+
+.B allow_only units
+restricts the compilation units that
+dynamically\-linked units can reference: it forbids all references
+to units other than those named in the list 
+.B units
+\&. References
+to any other compilation unit will cause a 
+.B Unavailable_unit
+error during 
+.B loadfile
+or 
+.B loadfile_private
+\&.
+.sp
+Initially (or after calling 
+.B default_available_units
+) all
+compilation units composing the program currently running are
+available for reference from dynamically\-linked units\&.
+.B allow_only
+can be used to restrict access to a subset of these
+units, e\&.g\&. to the units that compose the API for
+dynamically\-linked code, and prevent access to all other units,
+e\&.g\&. private, internal modules of the running program\&. If
+.B allow_only
+is called several times, access will be restricted to
+the intersection of the given lists (i\&.e\&. a call to 
+.B allow_only
+can never increase the set of available units)\&.
+
+.sp
+
+.I val prohibit 
+: 
+.B string list -> unit
+.sp
+
+.B prohibit units
+prohibits dynamically\-linked units from referencing
+the units named in list 
+.B units
+\&.  This can be used to prevent
+access to selected units, e\&.g\&. private, internal modules of
+the running program\&.
+
+.sp
+
+.I val default_available_units 
+: 
+.B unit -> unit
+.sp
+Reset the set of units that can be referenced from dynamically\-linked
+code to its default value, that is, all units composing the currently
+running program\&.
+
+.sp
+
+.I val allow_unsafe_modules 
+: 
+.B bool -> unit
+.sp
+Govern whether unsafe object files are allowed to be
+dynamically linked\&. A compilation unit is \&'unsafe\&' if it contains
+declarations of external functions, which can break type safety\&.
+By default, dynamic linking of unsafe object files is
+not allowed\&. In native code, this function does nothing; object files
+with external functions are always allowed to be dynamically linked\&.
+
+.sp
+
+.PP
+
+.B === 
+.B Deprecated, low\-level API for access control
+.B  ===
+
+.PP
+
+.I val add_interfaces 
+: 
+.B string list -> string list -> unit
+.sp
+
+.B add_interfaces units path
+grants dynamically\-linked object
+files access to the compilation  units named in list 
+.B units
+\&.
+The interfaces (
+.B \&.cmi
+files) for these units are searched in
+.B path
+(a list of directory names)\&.
+
+.sp
+
+.I val add_available_units 
+: 
+.B (string * Digest.t) list -> unit
+.sp
+Same as 
+.B Dynlink\&.add_interfaces
+, but instead of searching 
+.B \&.cmi
+files
+to find the unit interfaces, uses the interface digests given
+for each unit\&. This way, the 
+.B \&.cmi
+interface files need not be
+available at run\-time\&. The digests can be extracted from 
+.B \&.cmi
+files using the 
+.B extract_crc
+program installed in the
+OCaml standard library directory\&.
+
+.sp
+
+.I val clear_available_units 
+: 
+.B unit -> unit
+.sp
+Empty the list of compilation units accessible to dynamically\-linked
+programs\&.
+
+.sp
+
+.PP
+
+.B === 
+.B Deprecated, initialization
+.B  ===
+
+.PP
+
+.I val init 
+: 
+.B unit -> unit
+.sp
+.B "Deprecated."
+Initialize the 
+.B Dynlink
+library\&. This function is called
+automatically when needed\&.
+
+.sp
+
+.PP
+
+.B === 
+.B Error reporting
+.B  ===
+
+.PP
+.I type linking_error 
+=
+ | Undefined_global
+.B of 
+.B string
+ | Unavailable_primitive
+.B of 
+.B string
+ | Uninitialized_global
+.B of 
+.B string
+ 
+.sp
+
+.sp
+.I type error 
+=
+ | Not_a_bytecode_file
+.B of 
+.B string
+ | Inconsistent_import
+.B of 
+.B string
+ | Unavailable_unit
+.B of 
+.B string
+ | Unsafe_file
+ | Linking_error
+.B of 
+.B string * linking_error
+ | Corrupted_interface
+.B of 
+.B string
+ | File_not_found
+.B of 
+.B string
+ | Cannot_open_dll
+.B of 
+.B string
+ | Inconsistent_implementation
+.B of 
+.B string
+ 
+.sp
+
+.sp
+
+.I exception Error 
+.B of 
+.B error
+
+.sp
+Errors in dynamic linking are reported by raising the 
+.B Error
+exception with a description of the error\&.
+
+.sp
+
+.I val error_message 
+: 
+.B error -> string
+.sp
+Convert an error description to a printable message\&.
+
+.sp

@@ -1,0 +1,51 @@
+.TH "Simplif" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Simplif \- Lambda simplification and lambda plugin hooks
+.SH Module
+Module   Simplif
+.SH Documentation
+.sp
+Module
+.BI "Simplif"
+ : 
+.B sig  end
+
+.sp
+Lambda simplification and lambda plugin hooks
+
+.sp
+
+.sp
+.sp
+
+.I val simplify_lambda 
+: 
+.B string -> Lambda.lambda -> Lambda.lambda
+.sp
+
+.sp
+
+.I val split_default_wrapper 
+: 
+.B id:Ident.t ->
+.B   kind:Lambda.function_kind ->
+.B   params:Ident.t list ->
+.B   body:Lambda.lambda ->
+.B   attr:Lambda.function_attribute ->
+.B   loc:Location.t -> (Ident.t * Lambda.lambda) list
+.sp
+
+.sp
+
+.I val is_tail_native_heuristic 
+: 
+.B (int -> bool) Pervasives.ref
+.sp
+
+.sp
+.I module Hooks : 
+.B sig  end
+
+.sp
+
+.sp

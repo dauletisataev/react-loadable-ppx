@@ -1,0 +1,37 @@
+.TH "Pparse.ImplementationHooks" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Pparse.ImplementationHooks \- no description
+.SH Module
+Module   Pparse.ImplementationHooks
+.SH Documentation
+.sp
+Module
+.BI "ImplementationHooks"
+ : 
+.B sig  end
+
+.sp
+
+.sp
+
+.sp
+.sp
+.I type t 
+
+.sp
+
+.sp
+
+.I val add_hook 
+: 
+.B string -> (Misc.hook_info -> t -> t) -> unit
+.sp
+
+.sp
+
+.I val apply_hooks 
+: 
+.B Misc.hook_info -> t -> t
+.sp
+
+.sp

@@ -1,0 +1,253 @@
+.TH "Thread" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Thread \- Lightweight threads.
+.SH Module
+Module   Thread
+.SH Documentation
+.sp
+Module
+.BI "Thread"
+ : 
+.B sig  end
+
+.sp
+Lightweight threads\&.
+
+.sp
+
+.sp
+.sp
+.I type t 
+
+.sp
+The type of thread handles\&.
+
+.sp
+
+.PP
+
+.B === 
+.B Thread creation and termination
+.B  ===
+
+.PP
+
+.I val create 
+: 
+.B ('a -> 'b) -> 'a -> t
+.sp
+
+.B Thread\&.create funct arg
+creates a new thread of control,
+in which the function application 
+.B funct arg
+is executed concurrently with the other threads of the program\&.
+The application of 
+.B Thread\&.create
+returns the handle of the newly created thread\&.
+The new thread terminates when the application 
+.B funct arg
+returns, either normally or by raising an uncaught exception\&.
+In the latter case, the exception is printed on standard error,
+but not propagated back to the parent thread\&. Similarly, the
+result of the application 
+.B funct arg
+is discarded and not
+directly accessible to the parent thread\&.
+
+.sp
+
+.I val self 
+: 
+.B unit -> t
+.sp
+Return the thread currently executing\&.
+
+.sp
+
+.I val id 
+: 
+.B t -> int
+.sp
+Return the identifier of the given thread\&. A thread identifier
+is an integer that identifies uniquely the thread\&.
+It can be used to build data structures indexed by threads\&.
+
+.sp
+
+.I val exit 
+: 
+.B unit -> unit
+.sp
+Terminate prematurely the currently executing thread\&.
+
+.sp
+
+.I val kill 
+: 
+.B t -> unit
+.sp
+Terminate prematurely the thread whose handle is given\&.
+This functionality is available only with bytecode\-level threads\&.
+
+.sp
+
+.PP
+
+.B === 
+.B Suspending threads
+.B  ===
+
+.PP
+
+.I val delay 
+: 
+.B float -> unit
+.sp
+
+.B delay d
+suspends the execution of the calling thread for
+.B d
+seconds\&. The other program threads continue to run during
+this time\&.
+
+.sp
+
+.I val join 
+: 
+.B t -> unit
+.sp
+
+.B join th
+suspends the execution of the calling thread
+until the thread 
+.B th
+has terminated\&.
+
+.sp
+
+.I val wait_read 
+: 
+.B Unix.file_descr -> unit
+.sp
+See 
+.B Thread\&.wait_write
+\&.
+
+.sp
+
+.I val wait_write 
+: 
+.B Unix.file_descr -> unit
+.sp
+Suspend the execution of the calling thread until at least
+one character or EOF is available for reading (
+.B Thread\&.wait_read
+) or
+one character can be written without blocking (
+.B wait_write
+)
+on the given Unix file descriptor\&.
+
+.sp
+
+.I val wait_timed_read 
+: 
+.B Unix.file_descr -> float -> bool
+.sp
+See 
+.B Thread\&.wait_timed_write
+\&.
+
+.sp
+
+.I val wait_timed_write 
+: 
+.B Unix.file_descr -> float -> bool
+.sp
+Same as 
+.B Thread\&.wait_read
+and 
+.B Thread\&.wait_write
+, but wait for at most
+the amount of time given as second argument (in seconds)\&.
+Return 
+.B true
+if the file descriptor is ready for input/output
+and 
+.B false
+if the timeout expired\&.
+
+.sp
+
+.I val select 
+: 
+.B Unix.file_descr list ->
+.B   Unix.file_descr list ->
+.B   Unix.file_descr list ->
+.B   float -> Unix.file_descr list * Unix.file_descr list * Unix.file_descr list
+.sp
+Suspend the execution of the calling thread until input/output
+becomes possible on the given Unix file descriptors\&.
+The arguments and results have the same meaning as for
+.B Unix\&.select
+\&.
+
+.sp
+
+.I val wait_pid 
+: 
+.B int -> int * Unix.process_status
+.sp
+
+.B wait_pid p
+suspends the execution of the calling thread
+until the Unix process specified by the process identifier 
+.B p
+terminates\&. A pid 
+.B p
+of 
+.B \-1
+means wait for any child\&.
+A pid of 
+.B 0
+means wait for any child in the same process group
+as the current process\&. Negative pid arguments represent
+process groups\&. Returns the pid of the child caught and
+its termination status, as per 
+.B Unix\&.wait
+\&.
+
+.sp
+
+.I val wait_signal 
+: 
+.B int list -> int
+.sp
+
+.B wait_signal sigs
+suspends the execution of the calling thread
+until the process receives one of the signals specified in the
+list 
+.B sigs
+\&.  It then returns the number of the signal received\&.
+Signal handlers attached to the signals in 
+.B sigs
+will not
+be invoked\&.  Do not call 
+.B wait_signal
+concurrently
+from several threads on the same signals\&.
+
+.sp
+
+.I val yield 
+: 
+.B unit -> unit
+.sp
+Re\-schedule the calling thread without suspending it\&.
+This function can be used to give scheduling hints,
+telling the scheduler that now is a good time to
+switch to other threads\&.
+
+.sp

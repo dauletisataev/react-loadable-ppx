@@ -1,0 +1,131 @@
+.TH "Misc.Stdlib.List" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Misc.Stdlib.List \- no description
+.SH Module
+Module   Misc.Stdlib.List
+.SH Documentation
+.sp
+Module
+.BI "List"
+ : 
+.B sig  end
+
+.sp
+
+.sp
+
+.sp
+.sp
+.I type 
+.B 'a
+.I t 
+= 
+.B 'a list
+
+.sp
+
+.sp
+
+.I val compare 
+: 
+.B ('a -> 'a -> int) -> 'a t -> 'a t -> int
+.sp
+The lexicographic order supported by the provided order\&.
+There is no constraint on the relative lengths of the lists\&.
+
+.sp
+
+.I val equal 
+: 
+.B ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
+.sp
+Returns 
+.B true
+iff the given lists have the same length and content
+with respect to the given equality function\&.
+
+.sp
+
+.I val filter_map 
+: 
+.B ('a -> 'b option) -> 'a t -> 'b t
+.sp
+
+.B filter_map f l
+applies 
+.B f
+to every element of 
+.B l
+, filters
+out the 
+.B None
+elements and returns the list of the arguments of
+the 
+.B Some
+elements\&.
+
+.sp
+
+.I val some_if_all_elements_are_some 
+: 
+.B 'a option t -> 'a t option
+.sp
+If all elements of the given list are 
+.B Some _
+then 
+.B Some xs
+is returned with the 
+.B xs
+being the contents of those 
+.B Some
+s, with
+order preserved\&.  Otherwise return 
+.B None
+\&.
+
+.sp
+
+.I val map2_prefix 
+: 
+.B ('a -> 'b -> 'c) ->
+.B   'a t ->
+.B   'b t -> 'c t * 'b t
+.sp
+
+.B let r1, r2 = map2_prefix f l1 l2
+If 
+.B l1
+is of length n and 
+.B l2 = h2 @ t2
+with h2 of length n,
+r1 is 
+.B List\&.map2 f l1 h1
+and r2 is t2\&.
+
+.sp
+
+.I val split_at 
+: 
+.B int -> 'a t -> 'a t * 'a t
+.sp
+
+.B split_at n l
+returns the pair 
+.B before, after
+where 
+.B before
+is
+the 
+.B n
+first elements of 
+.B l
+and 
+.B after
+the remaining ones\&.
+If 
+.B l
+has less than 
+.B n
+elements, raises Invalid_argument\&.
+
+.sp

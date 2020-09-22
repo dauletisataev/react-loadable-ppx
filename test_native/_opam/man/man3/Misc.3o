@@ -1,0 +1,573 @@
+.TH "Misc" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Misc \- no description
+.SH Module
+Module   Misc
+.SH Documentation
+.sp
+Module
+.BI "Misc"
+ : 
+.B sig  end
+
+.sp
+
+.sp
+
+.sp
+.sp
+
+.I val fatal_error 
+: 
+.B string -> 'a
+.sp
+
+.sp
+
+.I val fatal_errorf 
+: 
+.B ('a, Format.formatter, unit, 'b) Pervasives.format4 -> 'a
+.sp
+
+.sp
+
+.I exception Fatal_error 
+
+.sp
+
+.sp
+
+.I val try_finally 
+: 
+.B (unit -> 'a) -> (unit -> unit) -> 'a
+.sp
+
+.sp
+
+.I val map_end 
+: 
+.B ('a -> 'b) -> 'a list -> 'b list -> 'b list
+.sp
+
+.sp
+
+.I val map_left_right 
+: 
+.B ('a -> 'b) -> 'a list -> 'b list
+.sp
+
+.sp
+
+.I val for_all2 
+: 
+.B ('a -> 'b -> bool) -> 'a list -> 'b list -> bool
+.sp
+
+.sp
+
+.I val replicate_list 
+: 
+.B 'a -> int -> 'a list
+.sp
+
+.sp
+
+.I val list_remove 
+: 
+.B 'a -> 'a list -> 'a list
+.sp
+
+.sp
+
+.I val split_last 
+: 
+.B 'a list -> 'a list * 'a
+.sp
+
+.sp
+
+.I val may 
+: 
+.B ('a -> unit) -> 'a option -> unit
+.sp
+
+.sp
+
+.I val may_map 
+: 
+.B ('a -> 'b) -> 'a option -> 'b option
+.sp
+
+.sp
+.I type ref_and_value 
+=
+ | R
+.B : 
+.B 'a Pervasives.ref * 'a
+.B -> 
+.B ref_and_value
+ 
+.sp
+
+.sp
+
+.I val protect_refs 
+: 
+.B ref_and_value list -> (unit -> 'a) -> 'a
+.sp
+
+.B protect_refs l f
+temporarily sets 
+.B r
+to 
+.B v
+for each 
+.B R (r, v)
+in 
+.B l
+while executing 
+.B f
+\&. The previous contents of the references is restored
+even if 
+.B f
+raises an exception\&.
+
+.sp
+.I module Stdlib : 
+.B sig  end
+
+.sp
+
+.sp
+
+.I val find_in_path 
+: 
+.B string list -> string -> string
+.sp
+
+.sp
+
+.I val find_in_path_rel 
+: 
+.B string list -> string -> string
+.sp
+
+.sp
+
+.I val find_in_path_uncap 
+: 
+.B string list -> string -> string
+.sp
+
+.sp
+
+.I val remove_file 
+: 
+.B string -> unit
+.sp
+
+.sp
+
+.I val expand_directory 
+: 
+.B string -> string -> string
+.sp
+
+.sp
+
+.I val create_hashtable 
+: 
+.B int -> ('a * 'b) list -> ('a, 'b) Hashtbl.t
+.sp
+
+.sp
+
+.I val copy_file 
+: 
+.B Pervasives.in_channel -> Pervasives.out_channel -> unit
+.sp
+
+.sp
+
+.I val copy_file_chunk 
+: 
+.B Pervasives.in_channel -> Pervasives.out_channel -> int -> unit
+.sp
+
+.sp
+
+.I val string_of_file 
+: 
+.B Pervasives.in_channel -> string
+.sp
+
+.sp
+
+.I val output_to_file_via_temporary 
+: 
+.B ?mode:Pervasives.open_flag list ->
+.B   string -> (string -> Pervasives.out_channel -> 'a) -> 'a
+.sp
+
+.sp
+
+.I val log2 
+: 
+.B int -> int
+.sp
+
+.sp
+
+.I val align 
+: 
+.B int -> int -> int
+.sp
+
+.sp
+
+.I val no_overflow_add 
+: 
+.B int -> int -> bool
+.sp
+
+.sp
+
+.I val no_overflow_sub 
+: 
+.B int -> int -> bool
+.sp
+
+.sp
+
+.I val no_overflow_mul 
+: 
+.B int -> int -> bool
+.sp
+
+.sp
+
+.I val no_overflow_lsl 
+: 
+.B int -> int -> bool
+.sp
+
+.sp
+.I module Int_literal_converter : 
+.B sig  end
+
+.sp
+
+.sp
+
+.I val chop_extensions 
+: 
+.B string -> string
+.sp
+
+.sp
+
+.I val search_substring 
+: 
+.B string -> string -> int -> int
+.sp
+
+.sp
+
+.I val replace_substring 
+: 
+.B before:string -> after:string -> string -> string
+.sp
+
+.sp
+
+.I val rev_split_words 
+: 
+.B string -> string list
+.sp
+
+.sp
+
+.I val get_ref 
+: 
+.B 'a list Pervasives.ref -> 'a list
+.sp
+
+.sp
+
+.I val fst3 
+: 
+.B 'a * 'b * 'c -> 'a
+.sp
+
+.sp
+
+.I val snd3 
+: 
+.B 'a * 'b * 'c -> 'b
+.sp
+
+.sp
+
+.I val thd3 
+: 
+.B 'a * 'b * 'c -> 'c
+.sp
+
+.sp
+
+.I val fst4 
+: 
+.B 'a * 'b * 'c * 'd -> 'a
+.sp
+
+.sp
+
+.I val snd4 
+: 
+.B 'a * 'b * 'c * 'd -> 'b
+.sp
+
+.sp
+
+.I val thd4 
+: 
+.B 'a * 'b * 'c * 'd -> 'c
+.sp
+
+.sp
+
+.I val for4 
+: 
+.B 'a * 'b * 'c * 'd -> 'd
+.sp
+
+.sp
+.I module LongString : 
+.B sig  end
+
+.sp
+
+.sp
+
+.I val edit_distance 
+: 
+.B string -> string -> int -> int option
+.sp
+
+.B edit_distance a b cutoff
+computes the edit distance between
+strings 
+.B a
+and 
+.B b
+\&. To help efficiency, it uses a cutoff: if the
+distance 
+.B d
+is smaller than 
+.B cutoff
+, it returns 
+.B Some d
+, else
+.B None
+\&.
+.sp
+The distance algorithm currently used is Damerau\-Levenshtein: it
+computes the number of insertion, deletion, substitution of
+letters, or swapping of adjacent letters to go from one word to the
+other\&. The particular algorithm may change in the future\&.
+
+.sp
+
+.I val spellcheck 
+: 
+.B string list -> string -> string list
+.sp
+
+.B spellcheck env name
+takes a list of names 
+.B env
+that exist in
+the current environment and an erroneous 
+.B name
+, and returns a
+list of suggestions taken from 
+.B env
+, that are close enough to
+.B name
+that it may be a typo for one of them\&.
+
+.sp
+
+.I val did_you_mean 
+: 
+.B Format.formatter -> (unit -> string list) -> unit
+.sp
+
+.B did_you_mean ppf get_choices
+hints that the user may have meant
+one of the option returned by calling 
+.B get_choices
+\&. It does nothing
+if the returned list is empty\&.
+.sp
+The 
+.B unit \-> \&.\&.\&.
+thunking is meant to delay any potentially\-slow
+computation (typically computing edit\-distance with many things
+from the current environment) to when the hint message is to be
+printed\&. You should print an understandable error message before
+calling 
+.B did_you_mean
+, so that users get a clear notification of
+the failure even if producing the hint is slow\&.
+
+.sp
+
+.I val cut_at 
+: 
+.B string -> char -> string * string
+.sp
+
+.B String\&.cut_at s c
+returns a pair containing the sub\-string before
+the first occurrence of 
+.B c
+in 
+.B s
+, and the sub\-string after the
+first occurrence of 
+.B c
+in 
+.B s
+\&.
+.B let (before, after) = String\&.cut_at s c in
+.B     before ^ String\&.make 1 c ^ after
+is the identity if 
+.B s
+contains 
+.B c
+\&.
+.sp
+Raise 
+.B Not_found
+if the character does not appear in the string
+
+.sp
+.B "Since"
+4.01
+
+.sp
+.I module StringSet : 
+.B sig  end
+
+.sp
+
+.sp
+.I module StringMap : 
+.B sig  end
+
+.sp
+
+.sp
+.I module Color : 
+.B sig  end
+
+.sp
+
+.sp
+
+.I val normalise_eol 
+: 
+.B string -> string
+.sp
+
+.B normalise_eol s
+returns a fresh copy of 
+.B s
+with any \&'\(rsr\&' characters
+removed\&. Intended for pre\-processing text which will subsequently be printed
+on a channel which performs EOL transformations (i\&.e\&. Windows)
+
+.sp
+
+.I val delete_eol_spaces 
+: 
+.B string -> string
+.sp
+
+.B delete_eol_spaces s
+returns a fresh copy of 
+.B s
+with any end of
+line spaces removed\&. Intended to normalize the output of the
+toplevel for tests\&.
+
+.sp
+
+.PP
+
+.B === 
+.B Hook machinery
+.B 
+.B 
+.B     Hooks machinery:
+.B    add_hook name f will register a function that will be called on the
+.B     argument of a later call to apply_hooks\&. Hooks are applied in the
+.B     lexicographical order of their names\&. ===
+
+.PP
+.I type hook_info 
+= {
+ sourcefile : 
+.B string
+;
+ }
+
+.sp
+
+.sp
+
+.I exception HookExnWrapper 
+.B of {
+ error : 
+.B exn
+;
+ hook_name : 
+.B string
+;
+ hook_info : 
+.B hook_info
+;
+ }
+
+.sp
+An exception raised by a hook will be wrapped into a
+.B HookExnWrapper
+constructor by the hook machinery\&.
+
+.sp
+
+.I val raise_direct_hook_exn 
+: 
+.B exn -> 'a
+.sp
+A hook can use 
+.B raise_unwrapped_hook_exn
+to raise an exception that will
+not be wrapped into a 
+.B Misc\&.HookExnWrapper
+\&.
+
+.sp
+.I module type HookSig = 
+.B sig  end
+
+.sp
+
+.sp
+.I module MakeHooks : 
+.B functor (M : sig  end) -> sig  end
+
+.sp
+
+.sp

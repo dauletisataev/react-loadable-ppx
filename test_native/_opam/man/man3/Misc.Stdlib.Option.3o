@@ -1,0 +1,63 @@
+.TH "Misc.Stdlib.Option" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Misc.Stdlib.Option \- no description
+.SH Module
+Module   Misc.Stdlib.Option
+.SH Documentation
+.sp
+Module
+.BI "Option"
+ : 
+.B sig  end
+
+.sp
+
+.sp
+
+.sp
+.sp
+.I type 
+.B 'a
+.I t 
+= 
+.B 'a option
+
+.sp
+
+.sp
+
+.I val equal 
+: 
+.B ('a -> 'a -> bool) ->
+.B   'a t -> 'a t -> bool
+.sp
+
+.sp
+
+.I val iter 
+: 
+.B ('a -> unit) -> 'a t -> unit
+.sp
+
+.sp
+
+.I val map 
+: 
+.B ('a -> 'b) -> 'a t -> 'b t
+.sp
+
+.sp
+
+.I val fold 
+: 
+.B ('a -> 'b -> 'b) -> 'a t -> 'b -> 'b
+.sp
+
+.sp
+
+.I val value_default 
+: 
+.B ('a -> 'b) -> default:'b -> 'a t -> 'b
+.sp
+
+.sp

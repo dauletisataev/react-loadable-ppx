@@ -1,0 +1,1033 @@
+.TH "Graphics" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Graphics \- Machine-independent graphics primitives.
+.SH Module
+Module   Graphics
+.SH Documentation
+.sp
+Module
+.BI "Graphics"
+ : 
+.B sig  end
+
+.sp
+Machine\-independent graphics primitives\&.
+
+.sp
+
+.sp
+.sp
+
+.I exception Graphic_failure 
+.B of 
+.B string
+
+.sp
+Raised by the functions below when they encounter an error\&.
+
+.sp
+
+.PP
+
+.B === 
+.B Initializations
+.B  ===
+
+.PP
+
+.I val open_graph 
+: 
+.B string -> unit
+.sp
+Show the graphics window or switch the screen to graphic mode\&.
+The graphics window is cleared and the current point is set
+to (0, 0)\&. The string argument is used to pass optional
+information on the desired graphics mode, the graphics window
+size, and so on\&. Its interpretation is implementation\-dependent\&.
+If the empty string is given, a sensible default is selected\&.
+
+.sp
+
+.I val close_graph 
+: 
+.B unit -> unit
+.sp
+Delete the graphics window or switch the screen back to text mode\&.
+
+.sp
+
+.I val set_window_title 
+: 
+.B string -> unit
+.sp
+Set the title of the graphics window\&.
+
+.sp
+
+.I val resize_window 
+: 
+.B int -> int -> unit
+.sp
+Resize and erase the graphics window\&.
+
+.sp
+
+.I val clear_graph 
+: 
+.B unit -> unit
+.sp
+Erase the graphics window\&.
+
+.sp
+
+.I val size_x 
+: 
+.B unit -> int
+.sp
+See 
+.B Graphics\&.size_y
+\&.
+
+.sp
+
+.I val size_y 
+: 
+.B unit -> int
+.sp
+Return the size of the graphics window\&. Coordinates of the screen
+pixels range over 
+.B 0 \&.\&. size_x()\-1
+and 
+.B 0 \&.\&. size_y()\-1
+\&.
+Drawings outside of this rectangle are clipped, without causing
+an error\&. The origin (0,0) is at the lower left corner\&. 
+Some implementation (e\&.g\&. X Windows) represent coordinates by
+16\-bit integers, hence wrong clipping may occur with coordinates
+below 
+.B \-32768
+or above 
+.B 32676
+\&.
+
+.sp
+
+.PP
+
+.B === 
+.B Colors
+.B  ===
+
+.PP
+.I type color 
+= 
+.B int
+
+.sp
+A color is specified by its R, G, B components\&. Each component
+is in the range 
+.B 0\&.\&.255
+\&. The three components are packed in
+an 
+.B int
+: 
+.B 0xRRGGBB
+, where 
+.B RR
+are the two hexadecimal digits for
+the red component, 
+.B GG
+for the green component, 
+.B BB
+for the
+blue component\&.
+
+.sp
+
+.I val rgb 
+: 
+.B int -> int -> int -> color
+.sp
+
+.B rgb r g b
+returns the integer encoding the color with red
+component 
+.B r
+, green component 
+.B g
+, and blue component 
+.B b
+\&.
+.B r
+, 
+.B g
+and 
+.B b
+are in the range 
+.B 0\&.\&.255
+\&.
+
+.sp
+
+.I val set_color 
+: 
+.B color -> unit
+.sp
+Set the current drawing color\&.
+
+.sp
+
+.I val background 
+: 
+.B color
+.sp
+See 
+.B Graphics\&.foreground
+\&.
+
+.sp
+
+.I val foreground 
+: 
+.B color
+.sp
+Default background and foreground colors (usually, either black
+foreground on a white background or white foreground on a
+black background)\&.
+.B Graphics\&.clear_graph
+fills the screen with the 
+.B background
+color\&.
+The initial drawing color is 
+.B foreground
+\&.
+
+.sp
+
+.PP
+
+.B === 
+.B Some predefined colors
+.B  ===
+
+.PP
+
+.I val black 
+: 
+.B color
+.sp
+
+.sp
+
+.I val white 
+: 
+.B color
+.sp
+
+.sp
+
+.I val red 
+: 
+.B color
+.sp
+
+.sp
+
+.I val green 
+: 
+.B color
+.sp
+
+.sp
+
+.I val blue 
+: 
+.B color
+.sp
+
+.sp
+
+.I val yellow 
+: 
+.B color
+.sp
+
+.sp
+
+.I val cyan 
+: 
+.B color
+.sp
+
+.sp
+
+.I val magenta 
+: 
+.B color
+.sp
+
+.sp
+
+.PP
+
+.B === 
+.B Point and line drawing
+.B  ===
+
+.PP
+
+.I val plot 
+: 
+.B int -> int -> unit
+.sp
+Plot the given point with the current drawing color\&.
+
+.sp
+
+.I val plots 
+: 
+.B (int * int) array -> unit
+.sp
+Plot the given points with the current drawing color\&.
+
+.sp
+
+.I val point_color 
+: 
+.B int -> int -> color
+.sp
+Return the color of the given point in the backing store
+(see "Double buffering" below)\&.
+
+.sp
+
+.I val moveto 
+: 
+.B int -> int -> unit
+.sp
+Position the current point\&.
+
+.sp
+
+.I val rmoveto 
+: 
+.B int -> int -> unit
+.sp
+
+.B rmoveto dx dy
+translates the current point by the given vector\&.
+
+.sp
+
+.I val current_x 
+: 
+.B unit -> int
+.sp
+Return the abscissa of the current point\&.
+
+.sp
+
+.I val current_y 
+: 
+.B unit -> int
+.sp
+Return the ordinate of the current point\&.
+
+.sp
+
+.I val current_point 
+: 
+.B unit -> int * int
+.sp
+Return the position of the current point\&.
+
+.sp
+
+.I val lineto 
+: 
+.B int -> int -> unit
+.sp
+Draw a line with endpoints the current point and the given point,
+and move the current point to the given point\&.
+
+.sp
+
+.I val rlineto 
+: 
+.B int -> int -> unit
+.sp
+Draw a line with endpoints the current point and the
+current point translated of the given vector,
+and move the current point to this point\&.
+
+.sp
+
+.I val curveto 
+: 
+.B int * int -> int * int -> int * int -> unit
+.sp
+
+.B curveto b c d
+draws a cubic Bezier curve starting from
+the current point to point 
+.B d
+, with control points 
+.B b
+and
+.B c
+, and moves the current point to 
+.B d
+\&.
+
+.sp
+
+.I val draw_rect 
+: 
+.B int -> int -> int -> int -> unit
+.sp
+
+.B draw_rect x y w h
+draws the rectangle with lower left corner
+at 
+.B x,y
+, width 
+.B w
+and height 
+.B h
+\&.
+The current point is unchanged\&.
+Raise 
+.B Invalid_argument
+if 
+.B w
+or 
+.B h
+is negative\&.
+
+.sp
+
+.I val draw_poly_line 
+: 
+.B (int * int) array -> unit
+.sp
+
+.B draw_poly_line points
+draws the line that joins the
+points given by the array argument\&.
+The array contains the coordinates of the vertices of the
+polygonal line, which need not be closed\&.
+The current point is unchanged\&.
+
+.sp
+
+.I val draw_poly 
+: 
+.B (int * int) array -> unit
+.sp
+
+.B draw_poly polygon
+draws the given polygon\&.
+The array contains the coordinates of the vertices of the
+polygon\&.
+The current point is unchanged\&.
+
+.sp
+
+.I val draw_segments 
+: 
+.B (int * int * int * int) array -> unit
+.sp
+
+.B draw_segments segments
+draws the segments given in the array
+argument\&. Each segment is specified as a quadruple
+.B (x0, y0, x1, y1)
+where 
+.B (x0, y0)
+and 
+.B (x1, y1)
+are
+the coordinates of the end points of the segment\&.
+The current point is unchanged\&.
+
+.sp
+
+.I val draw_arc 
+: 
+.B int -> int -> int -> int -> int -> int -> unit
+.sp
+
+.B draw_arc x y rx ry a1 a2
+draws an elliptical arc with center
+.B x,y
+, horizontal radius 
+.B rx
+, vertical radius 
+.B ry
+, from angle
+.B a1
+to angle 
+.B a2
+(in degrees)\&. The current point is unchanged\&.
+Raise 
+.B Invalid_argument
+if 
+.B rx
+or 
+.B ry
+is negative\&.
+
+.sp
+
+.I val draw_ellipse 
+: 
+.B int -> int -> int -> int -> unit
+.sp
+
+.B draw_ellipse x y rx ry
+draws an ellipse with center
+.B x,y
+, horizontal radius 
+.B rx
+and vertical radius 
+.B ry
+\&.
+The current point is unchanged\&.
+Raise 
+.B Invalid_argument
+if 
+.B rx
+or 
+.B ry
+is negative\&.
+
+.sp
+
+.I val draw_circle 
+: 
+.B int -> int -> int -> unit
+.sp
+
+.B draw_circle x y r
+draws a circle with center 
+.B x,y
+and
+radius 
+.B r
+\&. The current point is unchanged\&.
+Raise 
+.B Invalid_argument
+if 
+.B r
+is negative\&.
+
+.sp
+
+.I val set_line_width 
+: 
+.B int -> unit
+.sp
+Set the width of points and lines drawn with the functions above\&.
+Under X Windows, 
+.B set_line_width 0
+selects a width of 1 pixel
+and a faster, but less precise drawing algorithm than the one
+used when 
+.B set_line_width 1
+is specified\&.
+Raise 
+.B Invalid_argument
+if the argument is negative\&.
+
+.sp
+
+.PP
+
+.B === 
+.B Text drawing
+.B  ===
+
+.PP
+
+.I val draw_char 
+: 
+.B char -> unit
+.sp
+See 
+.B Graphics\&.draw_string
+\&.
+
+.sp
+
+.I val draw_string 
+: 
+.B string -> unit
+.sp
+Draw a character or a character string with lower left corner
+at current position\&. After drawing, the current position is set
+to the lower right corner of the text drawn\&.
+
+.sp
+
+.I val set_font 
+: 
+.B string -> unit
+.sp
+Set the font used for drawing text\&.
+The interpretation of the argument to 
+.B set_font
+is implementation\-dependent\&.
+
+.sp
+
+.I val set_text_size 
+: 
+.B int -> unit
+.sp
+Set the character size used for drawing text\&.
+The interpretation of the argument to 
+.B set_text_size
+is implementation\-dependent\&.
+
+.sp
+
+.I val text_size 
+: 
+.B string -> int * int
+.sp
+Return the dimensions of the given text, if it were drawn with
+the current font and size\&.
+
+.sp
+
+.PP
+
+.B === 
+.B Filling
+.B  ===
+
+.PP
+
+.I val fill_rect 
+: 
+.B int -> int -> int -> int -> unit
+.sp
+
+.B fill_rect x y w h
+fills the rectangle with lower left corner
+at 
+.B x,y
+, width 
+.B w
+and height 
+.B h
+, with the current color\&.
+Raise 
+.B Invalid_argument
+if 
+.B w
+or 
+.B h
+is negative\&.
+
+.sp
+
+.I val fill_poly 
+: 
+.B (int * int) array -> unit
+.sp
+Fill the given polygon with the current color\&. The array
+contains the coordinates of the vertices of the polygon\&.
+
+.sp
+
+.I val fill_arc 
+: 
+.B int -> int -> int -> int -> int -> int -> unit
+.sp
+Fill an elliptical pie slice with the current color\&. The
+parameters are the same as for 
+.B Graphics\&.draw_arc
+\&.
+
+.sp
+
+.I val fill_ellipse 
+: 
+.B int -> int -> int -> int -> unit
+.sp
+Fill an ellipse with the current color\&. The
+parameters are the same as for 
+.B Graphics\&.draw_ellipse
+\&.
+
+.sp
+
+.I val fill_circle 
+: 
+.B int -> int -> int -> unit
+.sp
+Fill a circle with the current color\&. The
+parameters are the same as for 
+.B Graphics\&.draw_circle
+\&.
+
+.sp
+
+.PP
+
+.B === 
+.B Images
+.B  ===
+
+.PP
+.I type image 
+
+.sp
+The abstract type for images, in internal representation\&.
+Externally, images are represented as matrices of colors\&.
+
+.sp
+
+.I val transp 
+: 
+.B color
+.sp
+In matrices of colors, this color represent a \&'transparent\&'
+point: when drawing the corresponding image, all pixels on the
+screen corresponding to a transparent pixel in the image will
+not be modified, while other points will be set to the color
+of the corresponding point in the image\&. This allows superimposing
+an image over an existing background\&.
+
+.sp
+
+.I val make_image 
+: 
+.B color array array -> image
+.sp
+Convert the given color matrix to an image\&.
+Each sub\-array represents one horizontal line\&. All sub\-arrays
+must have the same length; otherwise, exception 
+.B Graphic_failure
+is raised\&.
+
+.sp
+
+.I val dump_image 
+: 
+.B image -> color array array
+.sp
+Convert an image to a color matrix\&.
+
+.sp
+
+.I val draw_image 
+: 
+.B image -> int -> int -> unit
+.sp
+Draw the given image with lower left corner at the given point\&.
+
+.sp
+
+.I val get_image 
+: 
+.B int -> int -> int -> int -> image
+.sp
+Capture the contents of a rectangle on the screen as an image\&.
+The parameters are the same as for 
+.B Graphics\&.fill_rect
+\&.
+
+.sp
+
+.I val create_image 
+: 
+.B int -> int -> image
+.sp
+
+.B create_image w h
+returns a new image 
+.B w
+pixels wide and 
+.B h
+pixels tall, to be used in conjunction with 
+.B blit_image
+\&.
+The initial image contents are random, except that no point
+is transparent\&.
+
+.sp
+
+.I val blit_image 
+: 
+.B image -> int -> int -> unit
+.sp
+
+.B blit_image img x y
+copies screen pixels into the image 
+.B img
+,
+modifying 
+.B img
+in\-place\&. The pixels copied are those inside the
+rectangle with lower left corner at 
+.B x,y
+, and width and height
+equal to those of the image\&. Pixels that were transparent in
+.B img
+are left unchanged\&.
+
+.sp
+
+.PP
+
+.B === 
+.B Mouse and keyboard events
+.B  ===
+
+.PP
+.I type status 
+= {
+ mouse_x : 
+.B int
+;  (* X coordinate of the mouse
+ *) 
+ mouse_y : 
+.B int
+;  (* Y coordinate of the mouse
+ *) 
+ button : 
+.B bool
+;  (* true if a mouse button is pressed
+ *) 
+ keypressed : 
+.B bool
+;  (* true if a key has been pressed
+ *) 
+ key : 
+.B char
+;  (* the character for the key pressed
+ *) 
+ }
+
+.sp
+To report events\&.
+
+.sp
+.I type event 
+=
+ | Button_down  (* A mouse button is pressed
+ *)
+ | Button_up  (* A mouse button is released
+ *)
+ | Key_pressed  (* A key is pressed
+ *)
+ | Mouse_motion  (* The mouse is moved
+ *)
+ | Poll  (* Don\&'t wait; return immediately
+ *)
+ 
+.sp
+To specify events to wait for\&.
+
+.sp
+
+.I val wait_next_event 
+: 
+.B event list -> status
+.sp
+Wait until one of the events specified in the given event list
+occurs, and return the status of the mouse and keyboard at
+that time\&. If 
+.B Poll
+is given in the event list, return immediately
+with the current status\&. If the mouse cursor is outside of the
+graphics window, the 
+.B mouse_x
+and 
+.B mouse_y
+fields of the event are
+outside the range 
+.B 0\&.\&.size_x()\-1, 0\&.\&.size_y()\-1
+\&. Keypresses
+are queued, and dequeued one by one when the 
+.B Key_pressed
+event is specified and the 
+.B Poll
+event is not specified\&.
+
+.sp
+
+.I val loop_at_exit 
+: 
+.B event list -> (status -> unit) -> unit
+.sp
+Loop before exiting the program, the list given as argument is the
+list of handlers and the events on which these handlers are called\&.
+To exit cleanly the loop, the handler should raise Exit\&. Any other
+exception will be propagated outside of the loop\&.
+
+.sp
+.B "Since"
+4.01
+
+.sp
+
+.PP
+
+.B === 
+.B Mouse and keyboard polling
+.B  ===
+
+.PP
+
+.I val mouse_pos 
+: 
+.B unit -> int * int
+.sp
+Return the position of the mouse cursor, relative to the
+graphics window\&. If the mouse cursor is outside of the graphics
+window, 
+.B mouse_pos()
+returns a point outside of the range
+.B 0\&.\&.size_x()\-1, 0\&.\&.size_y()\-1
+\&.
+
+.sp
+
+.I val button_down 
+: 
+.B unit -> bool
+.sp
+Return 
+.B true
+if the mouse button is pressed, 
+.B false
+otherwise\&.
+
+.sp
+
+.I val read_key 
+: 
+.B unit -> char
+.sp
+Wait for a key to be pressed, and return the corresponding
+character\&. Keypresses are queued\&.
+
+.sp
+
+.I val key_pressed 
+: 
+.B unit -> bool
+.sp
+Return 
+.B true
+if a keypress is available; that is, if 
+.B read_key
+would not block\&.
+
+.sp
+
+.PP
+
+.B === 
+.B Sound
+.B  ===
+
+.PP
+
+.I val sound 
+: 
+.B int -> int -> unit
+.sp
+
+.B sound freq dur
+plays a sound at frequency 
+.B freq
+(in hertz)
+for a duration 
+.B dur
+(in milliseconds)\&.
+
+.sp
+
+.PP
+
+.B === 
+.B Double buffering
+.B  ===
+
+.PP
+
+.I val auto_synchronize 
+: 
+.B bool -> unit
+.sp
+By default, drawing takes place both on the window displayed
+on screen, and in a memory area (the \&'backing store\&')\&.
+The backing store image is used to re\-paint the on\-screen
+window when necessary\&.
+.sp
+To avoid flicker during animations, it is possible to turn
+off on\-screen drawing, perform a number of drawing operations
+in the backing store only, then refresh the on\-screen window
+explicitly\&.
+.sp
+
+.B auto_synchronize false
+turns on\-screen drawing off\&.  All
+subsequent drawing commands are performed on the backing store
+only\&.
+.sp
+
+.B auto_synchronize true
+refreshes the on\-screen window from
+the backing store (as per 
+.B synchronize
+), then turns on\-screen
+drawing back on\&.  All subsequent drawing commands are performed
+both on screen and in the backing store\&.
+.sp
+The default drawing mode corresponds to 
+.B auto_synchronize true
+\&.
+
+.sp
+
+.I val synchronize 
+: 
+.B unit -> unit
+.sp
+Synchronize the backing store and the on\-screen window, by
+copying the contents of the backing store onto the graphics
+window\&.
+
+.sp
+
+.I val display_mode 
+: 
+.B bool -> unit
+.sp
+Set display mode on or off\&. When turned on, drawings are done
+in the graphics window; when turned off, drawings do not affect
+the graphics window\&.  This occurs independently of
+drawing into the backing store (see the function 
+.B Graphics\&.remember_mode
+below)\&. Default display mode is on\&.
+
+.sp
+
+.I val remember_mode 
+: 
+.B bool -> unit
+.sp
+Set remember mode on or off\&. When turned on, drawings are done
+in the backing store; when turned off, the backing store is
+unaffected by drawings\&.  This occurs independently of drawing
+onto the graphics window (see the function 
+.B Graphics\&.display_mode
+above)\&.
+Default remember mode is on\&.
+
+.sp

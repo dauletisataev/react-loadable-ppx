@@ -1,0 +1,6 @@
+OPAM_SWITCH_PREFIX	=	/Users/admin/Desktop/ppx_42/test_native/_opam	Prefix\ of\ the\ current\ opam\ switch
+CAML_LD_LIBRARY_PATH	=	/Users/admin/Desktop/ppx_42/test_native/_opam/lib/stublibs	Updated\ by\ package\ ocaml-base-compiler
+CAML_LD_LIBRARY_PATH	=		Updated\ by\ package\ ocaml
+CAML_LD_LIBRARY_PATH	+=	/Users/admin/Desktop/ppx_42/test_native/_opam/lib/stublibs	Updated\ by\ package\ ocaml
+OCAML_TOPLEVEL_PATH	=	/Users/admin/Desktop/ppx_42/test_native/_opam/lib/toplevel	Updated\ by\ package\ ocaml
+PATH	=+=	/Users/admin/Desktop/ppx_42/test_native/_opam/bin	Binary\ dir\ for\ opam\ switch\ /Users/admin/Desktop/ppx_42/test_native

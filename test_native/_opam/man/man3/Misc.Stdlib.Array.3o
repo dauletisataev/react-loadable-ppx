@@ -1,0 +1,25 @@
+.TH "Misc.Stdlib.Array" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Misc.Stdlib.Array \- no description
+.SH Module
+Module   Misc.Stdlib.Array
+.SH Documentation
+.sp
+Module
+.BI "Array"
+ : 
+.B sig  end
+
+.sp
+
+.sp
+
+.sp
+.sp
+
+.I val exists2 
+: 
+.B ('a -> 'b -> bool) -> 'a array -> 'b array -> bool
+.sp
+
+.sp

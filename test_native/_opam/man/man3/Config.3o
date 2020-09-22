@@ -1,0 +1,480 @@
+.TH "Config" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Config \- no description
+.SH Module
+Module   Config
+.SH Documentation
+.sp
+Module
+.BI "Config"
+ : 
+.B sig  end
+
+.sp
+
+.sp
+
+.sp
+.sp
+
+.I val version 
+: 
+.B string
+.sp
+
+.sp
+
+.I val standard_library 
+: 
+.B string
+.sp
+
+.sp
+
+.I val standard_runtime 
+: 
+.B string
+.sp
+
+.sp
+
+.I val ccomp_type 
+: 
+.B string
+.sp
+
+.sp
+
+.I val c_compiler 
+: 
+.B string
+.sp
+
+.sp
+
+.I val c_output_obj 
+: 
+.B string
+.sp
+
+.sp
+
+.I val ocamlc_cflags 
+: 
+.B string
+.sp
+
+.sp
+
+.I val ocamlc_cppflags 
+: 
+.B string
+.sp
+
+.sp
+
+.I val ocamlopt_cflags 
+: 
+.B string
+.sp
+
+.sp
+
+.I val ocamlopt_cppflags 
+: 
+.B string
+.sp
+
+.sp
+
+.I val bytecomp_c_libraries 
+: 
+.B string
+.sp
+
+.sp
+
+.I val native_c_libraries 
+: 
+.B string
+.sp
+
+.sp
+
+.I val native_pack_linker 
+: 
+.B string
+.sp
+
+.sp
+
+.I val mkdll 
+: 
+.B string
+.sp
+
+.sp
+
+.I val mkexe 
+: 
+.B string
+.sp
+
+.sp
+
+.I val mkmaindll 
+: 
+.B string
+.sp
+
+.sp
+
+.I val ranlib 
+: 
+.B string
+.sp
+
+.sp
+
+.I val ar 
+: 
+.B string
+.sp
+
+.sp
+
+.I val cc_profile 
+: 
+.B string
+.sp
+
+.sp
+
+.I val load_path 
+: 
+.B string list Pervasives.ref
+.sp
+
+.sp
+
+.I val interface_suffix 
+: 
+.B string Pervasives.ref
+.sp
+
+.sp
+
+.I val exec_magic_number 
+: 
+.B string
+.sp
+
+.sp
+
+.I val cmi_magic_number 
+: 
+.B string
+.sp
+
+.sp
+
+.I val cmo_magic_number 
+: 
+.B string
+.sp
+
+.sp
+
+.I val cma_magic_number 
+: 
+.B string
+.sp
+
+.sp
+
+.I val cmx_magic_number 
+: 
+.B string
+.sp
+
+.sp
+
+.I val cmxa_magic_number 
+: 
+.B string
+.sp
+
+.sp
+
+.I val ast_intf_magic_number 
+: 
+.B string
+.sp
+
+.sp
+
+.I val ast_impl_magic_number 
+: 
+.B string
+.sp
+
+.sp
+
+.I val cmxs_magic_number 
+: 
+.B string
+.sp
+
+.sp
+
+.I val cmt_magic_number 
+: 
+.B string
+.sp
+
+.sp
+
+.I val max_tag 
+: 
+.B int
+.sp
+
+.sp
+
+.I val lazy_tag 
+: 
+.B int
+.sp
+
+.sp
+
+.I val max_young_wosize 
+: 
+.B int
+.sp
+
+.sp
+
+.I val stack_threshold 
+: 
+.B int
+.sp
+
+.sp
+
+.I val stack_safety_margin 
+: 
+.B int
+.sp
+
+.sp
+
+.I val architecture 
+: 
+.B string
+.sp
+
+.sp
+
+.I val model 
+: 
+.B string
+.sp
+
+.sp
+
+.I val system 
+: 
+.B string
+.sp
+
+.sp
+
+.I val asm 
+: 
+.B string
+.sp
+
+.sp
+
+.I val asm_cfi_supported 
+: 
+.B bool
+.sp
+
+.sp
+
+.I val with_frame_pointers 
+: 
+.B bool
+.sp
+
+.sp
+
+.I val ext_obj 
+: 
+.B string
+.sp
+
+.sp
+
+.I val ext_asm 
+: 
+.B string
+.sp
+
+.sp
+
+.I val ext_lib 
+: 
+.B string
+.sp
+
+.sp
+
+.I val ext_dll 
+: 
+.B string
+.sp
+
+.sp
+
+.I val default_executable_name 
+: 
+.B string
+.sp
+
+.sp
+
+.I val systhread_supported 
+: 
+.B bool
+.sp
+
+.sp
+
+.I val flexdll_dirs 
+: 
+.B string list
+.sp
+
+.sp
+
+.I val host 
+: 
+.B string
+.sp
+
+.sp
+
+.I val target 
+: 
+.B string
+.sp
+
+.sp
+
+.I val print_config 
+: 
+.B Pervasives.out_channel -> unit
+.sp
+
+.sp
+
+.I val profiling 
+: 
+.B bool
+.sp
+
+.sp
+
+.I val flambda 
+: 
+.B bool
+.sp
+
+.sp
+
+.I val with_flambda_invariants 
+: 
+.B bool
+.sp
+
+.sp
+
+.I val spacetime 
+: 
+.B bool
+.sp
+
+.sp
+
+.I val enable_call_counts 
+: 
+.B bool
+.sp
+
+.sp
+
+.I val profinfo 
+: 
+.B bool
+.sp
+
+.sp
+
+.I val profinfo_width 
+: 
+.B int
+.sp
+
+.sp
+
+.I val libunwind_available 
+: 
+.B bool
+.sp
+
+.sp
+
+.I val libunwind_link_flags 
+: 
+.B string
+.sp
+
+.sp
+
+.I val safe_string 
+: 
+.B bool
+.sp
+
+.sp
+
+.I val default_safe_string 
+: 
+.B bool
+.sp
+
+.sp
+
+.I val flat_float_array 
+: 
+.B bool
+.sp
+
+.sp
+
+.I val windows_unicode 
+: 
+.B bool
+.sp
+
+.sp
+
+.I val afl_instrument 
+: 
+.B bool
+.sp
+
+.sp

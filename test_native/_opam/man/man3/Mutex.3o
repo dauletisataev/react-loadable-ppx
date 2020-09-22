@@ -1,0 +1,84 @@
+.TH "Mutex" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Mutex \- Locks for mutual exclusion.
+.SH Module
+Module   Mutex
+.SH Documentation
+.sp
+Module
+.BI "Mutex"
+ : 
+.B sig  end
+
+.sp
+Locks for mutual exclusion\&.
+.sp
+Mutexes (mutual\-exclusion locks) are used to implement critical sections
+and protect shared mutable data structures against concurrent accesses\&.
+The typical use is (if 
+.B m
+is the mutex associated with the data structure
+.B D
+):
+.B 
+.B      Mutex\&.lock m;
+.B      (* Critical section that operates over D *);
+.B      Mutex\&.unlock m
+.B    
+
+
+.sp
+
+.sp
+.sp
+.I type t 
+
+.sp
+The type of mutexes\&.
+
+.sp
+
+.I val create 
+: 
+.B unit -> t
+.sp
+Return a new mutex\&.
+
+.sp
+
+.I val lock 
+: 
+.B t -> unit
+.sp
+Lock the given mutex\&. Only one thread can have the mutex locked
+at any time\&. A thread that attempts to lock a mutex already locked
+by another thread will suspend until the other thread unlocks
+the mutex\&.
+
+.sp
+
+.I val try_lock 
+: 
+.B t -> bool
+.sp
+Same as 
+.B Mutex\&.lock
+, but does not suspend the calling thread if
+the mutex is already locked: just return 
+.B false
+immediately
+in that case\&. If the mutex is unlocked, lock it and
+return 
+.B true
+\&.
+
+.sp
+
+.I val unlock 
+: 
+.B t -> unit
+.sp
+Unlock the given mutex\&. Other threads suspended trying to lock
+the mutex will restart\&.
+
+.sp

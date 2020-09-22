@@ -1,0 +1,46 @@
+.TH "Misc.MakeHooks" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Misc.MakeHooks \- no description
+.SH Module
+Module   Misc.MakeHooks
+.SH Documentation
+.sp
+Module
+.BI "MakeHooks"
+ : 
+.B functor (M : sig  end) -> sig  end
+
+.sp
+
+.sp
+.B "Parameters:"
+.sp
+"M"
+
+.B sig  end
+
+
+
+
+
+.sp
+.sp
+.I type t 
+
+.sp
+
+.sp
+
+.I val add_hook 
+: 
+.B string -> (Misc.hook_info -> t -> t) -> unit
+.sp
+
+.sp
+
+.I val apply_hooks 
+: 
+.B Misc.hook_info -> t -> t
+.sp
+
+.sp

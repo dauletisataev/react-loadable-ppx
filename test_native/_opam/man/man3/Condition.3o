@@ -1,0 +1,105 @@
+.TH "Condition" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Condition \- Condition variables to synchronize between threads.
+.SH Module
+Module   Condition
+.SH Documentation
+.sp
+Module
+.BI "Condition"
+ : 
+.B sig  end
+
+.sp
+Condition variables to synchronize between threads\&.
+.sp
+Condition variables are used when one thread wants to wait until another
+thread has finished doing something: the former thread ``waits\&'\&' on the
+condition variable, the latter thread ``signals\&'\&' the condition when it
+is done\&. Condition variables should always be protected by a mutex\&.
+The typical use is (if 
+.B D
+is a shared data structure, 
+.B m
+its mutex,
+and 
+.B c
+is a condition variable):
+.B 
+.B      Mutex\&.lock m;
+.B      while (* some predicate P over D is not satisfied *) do
+.B        Condition\&.wait c m
+.B      done;
+.B      (* Modify D *)
+.B      if (* the predicate P over D is now satisfied *) then Condition\&.signal c;
+.B      Mutex\&.unlock m
+.B    
+
+
+.sp
+
+.sp
+.sp
+.I type t 
+
+.sp
+The type of condition variables\&.
+
+.sp
+
+.I val create 
+: 
+.B unit -> t
+.sp
+Return a new condition variable\&.
+
+.sp
+
+.I val wait 
+: 
+.B t -> Mutex.t -> unit
+.sp
+
+.B wait c m
+atomically unlocks the mutex 
+.B m
+and suspends the
+calling process on the condition variable 
+.B c
+\&. The process will
+restart after the condition variable 
+.B c
+has been signalled\&.
+The mutex 
+.B m
+is locked again before 
+.B wait
+returns\&.
+
+.sp
+
+.I val signal 
+: 
+.B t -> unit
+.sp
+
+.B signal c
+restarts one of the processes waiting on the
+condition variable 
+.B c
+\&.
+
+.sp
+
+.I val broadcast 
+: 
+.B t -> unit
+.sp
+
+.B broadcast c
+restarts all processes waiting on the
+condition variable 
+.B c
+\&.
+
+.sp

@@ -1,0 +1,195 @@
+.TH "Event" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Event \- First-class synchronous communication.
+.SH Module
+Module   Event
+.SH Documentation
+.sp
+Module
+.BI "Event"
+ : 
+.B sig  end
+
+.sp
+First\-class synchronous communication\&.
+.sp
+This module implements synchronous inter\-thread communications over
+channels\&. As in John Reppy\&'s Concurrent ML system, the communication
+events are first\-class values: they can be built and combined
+independently before being offered for communication\&.
+
+.sp
+
+.sp
+.sp
+.I type 
+.B 'a
+.I channel 
+
+.sp
+The type of communication channels carrying values of type 
+.B \&'a
+\&.
+
+.sp
+
+.I val new_channel 
+: 
+.B unit -> 'a channel
+.sp
+Return a new channel\&.
+
+.sp
+.I type 
+.B +'a
+.I event 
+
+.sp
+The type of communication events returning a result of type 
+.B \&'a
+\&.
+
+.sp
+
+.I val send 
+: 
+.B 'a channel -> 'a -> unit event
+.sp
+
+.B send ch v
+returns the event consisting in sending the value 
+.B v
+over the channel 
+.B ch
+\&. The result value of this event is 
+.B ()
+\&.
+
+.sp
+
+.I val receive 
+: 
+.B 'a channel -> 'a event
+.sp
+
+.B receive ch
+returns the event consisting in receiving a value
+from the channel 
+.B ch
+\&. The result value of this event is the
+value received\&.
+
+.sp
+
+.I val always 
+: 
+.B 'a -> 'a event
+.sp
+
+.B always v
+returns an event that is always ready for
+synchronization\&.  The result value of this event is 
+.B v
+\&.
+
+.sp
+
+.I val choose 
+: 
+.B 'a event list -> 'a event
+.sp
+
+.B choose evl
+returns the event that is the alternative of
+all the events in the list 
+.B evl
+\&.
+
+.sp
+
+.I val wrap 
+: 
+.B 'a event -> ('a -> 'b) -> 'b event
+.sp
+
+.B wrap ev fn
+returns the event that performs the same communications
+as 
+.B ev
+, then applies the post\-processing function 
+.B fn
+on the return value\&.
+
+.sp
+
+.I val wrap_abort 
+: 
+.B 'a event -> (unit -> unit) -> 'a event
+.sp
+
+.B wrap_abort ev fn
+returns the event that performs
+the same communications as 
+.B ev
+, but if it is not selected
+the function 
+.B fn
+is called after the synchronization\&.
+
+.sp
+
+.I val guard 
+: 
+.B (unit -> 'a event) -> 'a event
+.sp
+
+.B guard fn
+returns the event that, when synchronized, computes
+.B fn()
+and behaves as the resulting event\&. This allows events with
+side\-effects to be computed at the time of the synchronization
+operation\&.
+
+.sp
+
+.I val sync 
+: 
+.B 'a event -> 'a
+.sp
+``Synchronize\&'\&' on an event: offer all the communication
+possibilities specified in the event to the outside world,
+and block until one of the communications succeed\&. The result
+value of that communication is returned\&.
+
+.sp
+
+.I val select 
+: 
+.B 'a event list -> 'a
+.sp
+``Synchronize\&'\&' on an alternative of events\&.
+.B select evl
+is shorthand for 
+.B sync(choose evl)
+\&.
+
+.sp
+
+.I val poll 
+: 
+.B 'a event -> 'a option
+.sp
+Non\-blocking version of 
+.B Event\&.sync
+: offer all the communication
+possibilities specified in the event to the outside world,
+and if one can take place immediately, perform it and return
+.B Some r
+where 
+.B r
+is the result value of that communication\&.
+Otherwise, return 
+.B None
+without blocking\&.
+
+.sp

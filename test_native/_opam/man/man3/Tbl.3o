@@ -1,0 +1,97 @@
+.TH "Tbl" 3 2020-09-15 OCamldoc "OCaml library"
+.SH NAME
+Tbl \- no description
+.SH Module
+Module   Tbl
+.SH Documentation
+.sp
+Module
+.BI "Tbl"
+ : 
+.B sig  end
+
+.sp
+
+.sp
+
+.sp
+.sp
+.I type 
+.B ('k, 'v)
+.I t 
+
+.sp
+
+.sp
+
+.I val empty 
+: 
+.B ('k, 'v) t
+.sp
+
+.sp
+
+.I val add 
+: 
+.B 'k -> 'v -> ('k, 'v) t -> ('k, 'v) t
+.sp
+
+.sp
+
+.I val find 
+: 
+.B 'k -> ('k, 'v) t -> 'v
+.sp
+
+.sp
+
+.I val find_str 
+: 
+.B string -> (string, 'v) t -> 'v
+.sp
+
+.sp
+
+.I val mem 
+: 
+.B 'k -> ('k, 'v) t -> bool
+.sp
+
+.sp
+
+.I val remove 
+: 
+.B 'k -> ('k, 'v) t -> ('k, 'v) t
+.sp
+
+.sp
+
+.I val iter 
+: 
+.B ('k -> 'v -> unit) -> ('k, 'v) t -> unit
+.sp
+
+.sp
+
+.I val map 
+: 
+.B ('k -> 'v1 -> 'v2) -> ('k, 'v1) t -> ('k, 'v2) t
+.sp
+
+.sp
+
+.I val fold 
+: 
+.B ('k -> 'v -> 'acc -> 'acc) -> ('k, 'v) t -> 'acc -> 'acc
+.sp
+
+.sp
+
+.I val print 
+: 
+.B (Format.formatter -> 'k -> unit) ->
+.B   (Format.formatter -> 'v -> unit) ->
+.B   Format.formatter -> ('k, 'v) t -> unit
+.sp
+
+.sp
